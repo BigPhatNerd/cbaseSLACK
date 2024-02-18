@@ -16,6 +16,7 @@ type Config struct {
 		ClientSecret      string `yaml:"CLIENT_SECRET"`
 		SigningSecret     string `yaml:"SIGNING_SECRET"`
 		VerificationToken string `yaml:"VERIFICATION_TOKEN"`
+		TeamID            string `yaml:"TEAM_ID"`
 	} `yaml:"slack"`
 	Aws struct {
 		AccessKey       string `yaml:"ACCESS_KEY"`

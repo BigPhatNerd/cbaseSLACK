@@ -1,0 +1,19 @@
+2024/02/17 19:12:57 token_exchange.go:185: refreshToken: xoxe-1-My0xLTM1MjU0MDk5NDY4MDctNjYzMjIxNTc1MzU4NS02NjU1NjM3NDU5MTQxLTczNTlhODExMWZmYjJlOTY5NjBhYzA5Y2NlNDYyYzc1ZDIwMzEzZWFmMjUyODU5YmRhNWE0ZWM1OGE4OWEwZWQ
+
+
+
+
+2024/02/17 19:12:57 token_exchange.go:127: refreshToken and tableName: xoxe-1-My0xLTM1MjU0MDk5NDY4MDctNjYzMjIxNTc1MzU4NS02NjU1NjM3NDU5MTQxLTczNTlhODExMWZmYjJlOTY5NjBhYzA5Y2NlNDYyYzc1ZDIwMzEzZWFmMjUyODU5YmRhNWE0ZWM1OGE4OWEwZWQ, BotToken
+2024/02/17 19:12:57 token_exchange.go:57: Response: {"ok":true,"token":"xoxe.xoxp-1-Mi0yLTM1MjU0MDk5NDY4MDctMzU1MjYyNTExMDU2MS02NjMyMjE1NzUzNTg1LTY2NTU3MzU0NjkzMTctYTY3NGIxNzA2NjZhMDIwYTNiOGU4YjdkOGZkNTk0ZjU5MjlmYWI1ZTNmMDcyOWJiMDU1MjkwMGQ5ODk0M2JiMg","refresh_token":"xoxe-1-My0xLTM1MjU0MDk5NDY4MDctNjYzMjIxNTc1MzU4NS02NjU4NTQwOTI1NjUxLTUwYWI2OGRjMzkyNTc3YzU0NmNlNjQ2MGQ2YjU3NjkwY2JmYTY2Njg5NzAyZjdhZTkwNDg4NjdmOWFjNmUzM2Y","team_id":"T03FFC1TUPR","user_id":"U03G8JD38GH","iat":1708218777,"exp":1708261977}
+2024/02/17 19:12:57 token_exchange.go:108: Token rotated and stored successfully for user T03FFC1TUPR
+2024/02/17 19:12:57 main.go:50: Server listening on port :4390
+2024/02/17 19:20:56 token_exchange.go:185: refreshToken: xoxe-1-My0xLTM1MjU0MDk5NDY4MDctNjYzMjIxNTc1MzU4NS02NjU4NTQwOTI1NjUxLTUwYWI2OGRjMzkyNTc3YzU0NmNlNjQ2MGQ2YjU3NjkwY2JmYTY2Njg5NzAyZjdhZTkwNDg4NjdmOWFjNmUzM2Y
+
+
+
+
+2024/02/17 19:20:57 token_exchange.go:57: Response: {"ok":true,"token":"xoxe.xoxp-1-Mi0yLTM1MjU0MDk5NDY4MDctMzU1MjYyNTExMDU2MS02NjMyMjE1NzUzNTg1LTY2NzEzMjAxMjg3MDUtMDMyNmRhNmQ4NjIyYzk2MzMxOGZiOWI4Yjg4MTk3NTIzOThmZjQ4MTZkZWU2Zjc3NWVkYmYwNmVkZDVjN2UxOQ","refresh_token":"xoxe-1-My0xLTM1MjU0MDk5NDY4MDctNjYzMjIxNTc1MzU4NS02NjgxNDQ1OTM2MTc2LWNmZTc3ZWJjYWJkM2FjYzcwYjk2NmY5ZTllZDRmYzE4OWZkMjZhNDM3MDdmNTFkZmJiZWJlYmJkOWFiY2I1NjY","team_id":"T03FFC1TUPR","user_id":"U03G8JD38GH","iat":1708219257,"exp":1708262457}
+2024/02/17 19:20:57 token_exchange.go:108: Token rotated and stored successfully for user T03FFC1TUPR
+2024/02/17 19:20:57 main.go:50: Server listening on port :4390
+2024/02/17 19:33:44 slackbot.go:151: Events: POST /events, Status: 200
+2024/02/17 19:44:47 slackbot.go:151: Events: POST /events, Status: 200
