@@ -117,9 +117,7 @@ func ScheduleTokenRotation(tableName string, interval time.Duration, teamID stri
     
         rotateTokenFunc := func() {
             refreshToken, err := getRefreshTokenFromStorage(teamID) 
-            // var refreshToken string
-            // var err error
-            // refreshToken = "xoxe-1-My0xLTM1MjU0MDk5NDY4MDctNjYzMjIxNTc1MzU4NS02NjI4Njc1ODUxNjg2LTgyYzNlZTlmNTRiYTM0ZTY0MjZlNTJiYTgyZWM3YzExOWVhZmNlMjIzMmJhMGRjZjgxMzU5MWNhNmZhNDY1YWU"
+            
             if err != nil {
                 log.Printf("Error retrieving refresh token: %v", err)
                 return
