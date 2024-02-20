@@ -9,8 +9,8 @@ import (
 type Config struct {
 	Slack struct {
 		BOTToken          string `yaml:"BOT_TOKEN"`
-		AccessToken       string `yaml:"ACCESS_TOKEN"`
-		RefreshToken      string `yaml:"REFRESH_TOKEN"`
+		AppAccessToken       string `yaml:"APP_CONFIG_ACCESS_TOKEN"`
+		AppRefreshToken      string `yaml:"APP_REFRESH_TOKEN"`
 		AppID             string `yaml:"APP_ID"`
 		ClientID          string `yaml:"CLIENT_ID"`
 		ClientSecret      string `yaml:"CLIENT_SECRET"`

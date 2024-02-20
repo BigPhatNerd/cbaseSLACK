@@ -1,0 +1,136 @@
+{
+	"blocks": [
+		{
+			"type": "header",
+			"text": {
+				"type": "plain_text",
+				"text": "Welcome to Cbase Demo App",
+				"emoji": true
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "plain_text",
+				"text": "Let's evaluate shall we....",
+				"emoji": true
+			}
+		},
+		{
+			"type": "image",
+			"image_url": "https://ctf-images-01.coinbasecdn.net/c5bd0wqjc7v0/6jPp0W7xH2Pe8kwUS79ZSm/85e33ed928fac1e8e58e2d693f5005e0/CB_blog_image.png",
+			"alt_text": "cute cat"
+		},
+		{
+			"type": "input",
+			"element": {
+				"type": "static_select",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "Select a department",
+					"emoji": true
+				},
+				"options": [
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "Engineering",
+							"emoji": true
+						},
+						"value": "value-0"
+					},
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "Human Resources",
+							"emoji": true
+						},
+						"value": "value-1"
+					},
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "Cat Herding",
+							"emoji": true
+						},
+						"value": "value-2"
+					}
+				],
+				"action_id": "select_department-action"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Select department of employee to evaluate",
+				"emoji": true
+			}
+		},
+		{
+			"type": "input",
+			"element": {
+				"type": "static_select",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "Select an employee",
+					"emoji": true
+				},
+				"options": [
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "Bob",
+							"emoji": true
+						},
+						"value": "value-0"
+					},
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "Mike",
+							"emoji": true
+						},
+						"value": "value-1"
+					},
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "Sheila",
+							"emoji": true
+						},
+						"value": "value-2"
+					},
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "Beth",
+							"emoji": true
+						},
+						"value": "value-3"
+					}
+				],
+				"action_id": "select_employee-action"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Select employee",
+				"emoji": true
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Begin assessment"
+			},
+			"accessory": {
+				"type": "button",
+				"text": {
+					"type": "plain_text",
+					"text": "Click Me",
+					"emoji": true
+				},
+				"value": "open_survey",
+				"action_id": "button-action"
+			}
+		}
+	]
+}

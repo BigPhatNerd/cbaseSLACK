@@ -15,7 +15,7 @@ import (
 
 func main(){
 	 tracer.Start(
-        tracer.WithService("DatatdogService"),
+        tracer.WithService("CbaseDemo"),
         tracer.WithEnv("CbaseDemo"),
     )
     defer tracer.Stop()
@@ -34,10 +34,10 @@ func main(){
 		log.Printf("Error reading config: %v", err)
 	}
 
-	tableName := "BotToken"
+	tableName := "Tokens"
     interval := 11 * time.Hour
 	teamID := configure.Slack.TeamID
-	oauth.ScheduleTokenRotation( tableName, interval, teamID)
+	oauth.ScheduleAppTokenRotation( tableName, interval, teamID)
 
     // Create a traced mux router
     mux := httptrace.NewServeMux()

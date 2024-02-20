@@ -18,19 +18,19 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 )
 
-// TokenRotationResponse represents the response from Slack token rotation endpoint.
-type TokenRotationResponse struct {
+// AppTokenRotationResponse represents the response from Slack token rotation endpoint.
+type AppTokenRotationResponse struct {
 	OK            bool   `json:"ok"`
-	AuthToken     string `json:"auth_token"`
-	RefreshToken  string `json:"refresh_token"`
+	AppAuthToken     string `json:"token"`
+	AppRefreshToken  string `json:"refresh_token"`
 	TeamID        string `json:"team_id"`
-	UserID        string `json:"user_id"`
-	IssuedAt      int64  `json:"iat"`
-	ExpiresAt     int64  `json:"exp"`
+	AppUserID        string `json:"user_id"`
+	AppTokenIssuedAt      int64  `json:"iat"`
+	AppTokenExpiresAt     int64  `json:"exp"`
 }
 
 // rotateToken uses the refresh token to obtain a new configuration token.
-func rotateToken(refreshToken string) (*TokenRotationResponse, error) {
+func rotateToken(refreshToken string) (*AppTokenRotationResponse, error) {
 	data := url.Values{}
 	data.Set("refresh_token", refreshToken)
 
@@ -54,8 +54,8 @@ func rotateToken(refreshToken string) (*TokenRotationResponse, error) {
 	if err != nil {
 		return nil, fmt.Errorf("reading response body: %w", err)
 	}
-log.Printf("Response: %v", string(body))
-	var response TokenRotationResponse
+
+	var response AppTokenRotationResponse
 	if err := json.Unmarshal(body, &response); err != nil {
 		return nil, fmt.Errorf("unmarshaling response: %w", err)
 	}
@@ -70,26 +70,29 @@ log.Printf("Response: %v", string(body))
 func rotateAndStoreToken(refreshToken, tableName string) error{
 
 	response, err := rotateToken(refreshToken)
+   
 	if err != nil {
+        log.Printf("Error rotating token: %v", err)
 		return fmt.Errorf("failed to rotate token: %w", err)
 	}
 
 	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
+log.Printf("Error loading SDK config: %v", err)
 		return fmt.Errorf("unable to load SDK config, %w", err)
 	}
 	svc := dynamodb.NewFromConfig(cfg)
 
-    iatStr := strconv.FormatInt(response.IssuedAt, 10)
-    expStr := strconv.FormatInt(response.ExpiresAt, 10)
-
+    iatStr := strconv.FormatInt(response.AppTokenIssuedAt, 10)
+    expStr := strconv.FormatInt(response.AppTokenExpiresAt, 10)
+log.Printf("Response: %v", response)
 update := map[string]types.AttributeValue{
-        ":t": &types.AttributeValueMemberS{Value: response.AuthToken},
-        ":r": &types.AttributeValueMemberS{Value: response.RefreshToken},
+        ":t": &types.AttributeValueMemberS{Value: response.AppAuthToken},
+        ":r": &types.AttributeValueMemberS{Value: response.AppRefreshToken},
         ":e": &types.AttributeValueMemberN{Value: expStr},
         ":iat": &types.AttributeValueMemberN{Value: iatStr},
-        ":uid": &types.AttributeValueMemberS{Value: response.UserID},
-        ":ok":  &types.AttributeValueMemberBOOL{Value: response.OK}, 
+        ":uid": &types.AttributeValueMemberS{Value: response.AppUserID},
+         
         
     }
 
@@ -98,10 +101,11 @@ update := map[string]types.AttributeValue{
         Key: map[string]types.AttributeValue{
             "TeamID": &types.AttributeValueMemberS{Value: response.TeamID}, 
         },
-        UpdateExpression: aws.String("SET AuthToken = :t, RefreshToken = :r, ExpiresAt = :e, IssuedAt = :iat, UserID = :uid, OK = :ok"),
+        UpdateExpression: aws.String("SET AppAuthToken = :t, AppRefreshToken = :r, AppTokenExpiresAt = :e, AppTokenIssuedAt = :iat, AppUserID = :uid"),
         ExpressionAttributeValues: update,
     })
     if err != nil {
+        log.Printf("Error updating item: %v", err)
         return fmt.Errorf("failed to update item in DynamoDB: %w", err)
     }
 
@@ -109,14 +113,14 @@ update := map[string]types.AttributeValue{
     return nil
 }
 
-func ScheduleTokenRotation(tableName string, interval time.Duration, teamID string) {
+func ScheduleAppTokenRotation(tableName string, interval time.Duration, teamID string) {
     
     ticker := time.NewTicker(interval)
     defer ticker.Stop()
 
     
         rotateTokenFunc := func() {
-            refreshToken, err := getRefreshTokenFromStorage(teamID) 
+            refreshToken, err := getAppRefreshTokenFromStorage(teamID) 
             
             if err != nil {
                 log.Printf("Error retrieving refresh token: %v", err)
@@ -141,7 +145,7 @@ func ScheduleTokenRotation(tableName string, interval time.Duration, teamID stri
     }()
 }
 
-func getRefreshTokenFromStorage(teamID string) (string, error) {
+func getAppRefreshTokenFromStorage(teamID string) (string, error) {
   if envToken := os.Getenv("HEROKU_REFRESH_TOKEN"); envToken != "" {
         log.Println("Using refresh token from environment variable")
         return envToken, nil
@@ -156,11 +160,11 @@ func getRefreshTokenFromStorage(teamID string) (string, error) {
 
     
     key := map[string]types.AttributeValue{
-        "TeamID": &types.AttributeValueMemberS{Value: teamID},
+        "TeamId": &types.AttributeValueMemberS{Value: teamID},
     }
 
     result, err := svc.GetItem(context.TODO(), &dynamodb.GetItemInput{
-        TableName: aws.String("BotToken"),
+        TableName: aws.String("Tokens"),
         Key: key,
     })
     if err != nil {
@@ -168,10 +172,10 @@ func getRefreshTokenFromStorage(teamID string) (string, error) {
     }
 
     if result.Item == nil {
-        return "", fmt.Errorf("no item found with the key TeamID")
+        return "", fmt.Errorf("no item found with the key TeamId")
     }
 
-    tokenAttr, exists := result.Item["RefreshToken"]
+    tokenAttr, exists := result.Item["AppRefreshToken"]
     if !exists {
         return "", fmt.Errorf("item does not contain a Token attribute")
     }
@@ -180,8 +184,49 @@ func getRefreshTokenFromStorage(teamID string) (string, error) {
     if !ok {
         return "", fmt.Errorf("token attribute is not a string")
     }
-log.Printf("refreshToken: %v\n\n\n\n\n", refreshToken.Value)
+
     return refreshToken.Value, nil
+}
+
+func FetchAppAuthToken(teamID string)(string, error){
+    cfg, err := config.LoadDefaultConfig(context.TODO())
+    if err != nil {
+        log.Printf("Error loading SDK config: %v", err)
+        return "", fmt.Errorf("unable to load SDK config: %w", err)
+    }
+
+    svc := dynamodb.NewFromConfig(cfg)
+
+    key := map[string]types.AttributeValue{
+        "TeamId": &types.AttributeValueMemberS{Value: teamID},
+    }
+
+    result, err := svc.GetItem(context.TODO(), &dynamodb.GetItemInput{
+        TableName: aws.String("Tokens"),
+        Key: key,
+    })
+    if err != nil{
+        log.Printf("Error getting item from DynamoDB: %v", err)
+        return "", fmt.Errorf("failed to get item from DynamoDB: %w", err)
+    }
+
+    if result.Item == nil {
+        log.Printf("No item found with the key TeamId %s", teamID)
+        return "", fmt.Errorf("no item found with the key TeamId %s", teamID)
+    }
+
+    tokenAttr, exists := result.Item["AppAuthToken"]
+    if !exists{
+        log.Printf("Item does not contain a Token attribute")
+        return "", fmt.Errorf("item does not contain a Token attribute")
+    }
+    authToken, ok := tokenAttr.(*types.AttributeValueMemberS)
+    if !ok{
+        log.Printf("Token attribute is not a string")
+        return "", fmt.Errorf("token attribute is not a string")
+    }
+
+    return authToken.Value, nil
 }
 
 
