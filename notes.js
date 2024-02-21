@@ -84,3 +84,16 @@ Bot Tokens and Refresh Tokens:
  https://api.slack.com/apps/A06J7D5SJGK/oauth
 
  https://ctf-images-01.coinbasecdn.net/c5bd0wqjc7v0/6jPp0W7xH2Pe8kwUS79ZSm/85e33ed928fac1e8e58e2d693f5005e0/CB_blog_image.png
+
+ // Input block dropdown:
+ //input block
+placeholderText := slack.NewTextBlockObject("plain_text", "Select a department", false, false)
+option1 := slack.NewOptionBlockObject("value-0", slack.NewTextBlockObject("plain_text", "Engineering", false, false), nil)
+option2 := slack.NewOptionBlockObject("value-1", slack.NewTextBlockObject("plain_text", "Human Resources", false, false), nil)
+option3 := slack.NewOptionBlockObject("value-2", slack.NewTextBlockObject("plain_text", "Marketing", false, false), nil)
+options := []*slack.OptionBlockObject{option1, option2, option3}
+
+staticSelect := slack.NewOptionsSelectBlockElement("static_select", placeholderText, "select_department-action", options...)
+	labelText := slack.NewTextBlockObject("plain_text", "Select a department:", false, false)
+
+	inputBlock := slack.NewInputBlock("input_select_department", labelText, nil, staticSelect)

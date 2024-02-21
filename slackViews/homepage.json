@@ -22,115 +22,42 @@
 			"alt_text": "cute cat"
 		},
 		{
-			"type": "input",
-			"element": {
-				"type": "static_select",
-				"placeholder": {
-					"type": "plain_text",
-					"text": "Select a department",
-					"emoji": true
-				},
-				"options": [
-					{
-						"text": {
-							"type": "plain_text",
-							"text": "Engineering",
-							"emoji": true
-						},
-						"value": "value-0"
-					},
-					{
-						"text": {
-							"type": "plain_text",
-							"text": "Human Resources",
-							"emoji": true
-						},
-						"value": "value-1"
-					},
-					{
-						"text": {
-							"type": "plain_text",
-							"text": "Cat Herding",
-							"emoji": true
-						},
-						"value": "value-2"
-					}
-				],
-				"action_id": "select_department-action"
-			},
-			"label": {
-				"type": "plain_text",
-				"text": "Select department of employee to evaluate",
-				"emoji": true
-			}
-		},
-		{
-			"type": "input",
-			"element": {
-				"type": "static_select",
-				"placeholder": {
-					"type": "plain_text",
-					"text": "Select an employee",
-					"emoji": true
-				},
-				"options": [
-					{
-						"text": {
-							"type": "plain_text",
-							"text": "Bob",
-							"emoji": true
-						},
-						"value": "value-0"
-					},
-					{
-						"text": {
-							"type": "plain_text",
-							"text": "Mike",
-							"emoji": true
-						},
-						"value": "value-1"
-					},
-					{
-						"text": {
-							"type": "plain_text",
-							"text": "Sheila",
-							"emoji": true
-						},
-						"value": "value-2"
-					},
-					{
-						"text": {
-							"type": "plain_text",
-							"text": "Beth",
-							"emoji": true
-						},
-						"value": "value-3"
-					}
-				],
-				"action_id": "select_employee-action"
-			},
-			"label": {
-				"type": "plain_text",
-				"text": "Select employee",
-				"emoji": true
-			}
-		},
-		{
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "Begin assessment"
+				"text": "Create a review of your co-worker"
 			},
 			"accessory": {
 				"type": "button",
 				"text": {
 					"type": "plain_text",
-					"text": "Click Me",
+					"text": "Create",
 					"emoji": true
 				},
-				"value": "open_survey",
+				"value": "create_value",
+				"action_id": "create_action"
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "This is a section block with a button."
+			},
+			"accessory": {
+				"type": "button",
+				"text": {
+					"type": "plain_text",
+					"text": "View Reviews",
+					"emoji": true
+				},
+				"value": "click_me_123",
 				"action_id": "button-action"
 			}
 		}
+	
 	]
 }
