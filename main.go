@@ -41,11 +41,12 @@ func main() {
 
 	teamID := configure.Slack.TeamID
 	oauth.ScheduleAppTokenRotation(tableName, teamID)
-	// oauth.RotateAndStoreToken("xoxe-1-XXXXXX", tableName)
+	// oauth.RotateAndStoreToken("xoxe-1-", tableName)
 
-	if err := RefreshBotToken(ctx, teamID); err != nil {
-		log.Printf("Error refreshing bot token: %v", err)
-	}
+	// if err := RefreshBotToken(ctx, teamID); err != nil {
+	// 	log.Printf("Error refreshing bot token: %v", err)
+	// }
+	scheduleRefreshBotToken(ctx, teamID, 10*time.Hour)
 
 	log.Printf("Bot token refreshed successfully")
 
@@ -68,6 +69,8 @@ func main() {
 	if err != nil {
 		log.Printf("Failed to start server: %v", err)
 	}
+
+	select {}
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {

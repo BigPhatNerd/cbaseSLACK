@@ -117,6 +117,22 @@ func exchangeCodeForBotToken(code string) error {
 	return nil
 }
 
+func scheduleRefreshBotToken(ctx context.Context, teamID string, interval time.Duration) {
+	ticker := time.NewTicker(interval)
+	go func() {
+		for {
+			select {
+			case <-ticker.C:
+				if err := RefreshBotToken(ctx, teamID); err != nil {
+					log.Printf("Error refreshing bot token: %v", err)
+				} else {
+					log.Println("Bot token refreshed successfully")
+				}
+			}
+		}
+	}()
+}
+
 func RefreshBotToken(ctx context.Context, teamID string) error {
 	botRefreshToken, err := FetchBotRefreshToken(ctx, teamID)
 	if err != nil {

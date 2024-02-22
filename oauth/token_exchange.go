@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
@@ -42,18 +43,19 @@ func rotateToken(refreshToken string) (*AppTokenRotationResponse, error) {
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
-
 	if err != nil {
 		return nil, fmt.Errorf("making request: %w", err)
 	}
 	defer resp.Body.Close()
 
-	body, err := ioutil.ReadAll(resp.Body)
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("slack API request failed with status code: %d", resp.StatusCode)
+	}
 
+	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("reading response body: %w", err)
 	}
-
 	var response AppTokenRotationResponse
 	if err := json.Unmarshal(body, &response); err != nil {
 		return nil, fmt.Errorf("unmarshaling response: %w", err)
@@ -84,7 +86,7 @@ func RotateAndStoreToken(refreshToken, tableName string) error {
 
 	iatStr := strconv.FormatInt(response.AppTokenIssuedAt, 10)
 	expStr := strconv.FormatInt(response.AppTokenExpiresAt, 10)
-	log.Printf("Response: %v", response)
+
 	update := map[string]types.AttributeValue{
 		":t":   &types.AttributeValueMemberS{Value: response.AppAuthToken},
 		":r":   &types.AttributeValueMemberS{Value: response.AppRefreshToken},
@@ -111,6 +113,7 @@ func RotateAndStoreToken(refreshToken, tableName string) error {
 }
 
 func ScheduleAppTokenRotation(tableName string, teamID string) {
+
 	rotateTokenFunc := func() {
 		refreshToken, err := getAppRefreshTokenFromStorage(teamID)
 
@@ -123,12 +126,20 @@ func ScheduleAppTokenRotation(tableName string, teamID string) {
 		if err != nil {
 			log.Printf("Error rotating token: %v", err)
 		}
-
-		log.Printf("App token rotated and stored successfully for team %s", teamID)
 	}
 
 	rotateTokenFunc()
 
+	// Schedule to run every 10 hours
+	ticker := time.NewTicker(10 * time.Hour)
+	go func() {
+		for {
+			select {
+			case <-ticker.C:
+				rotateTokenFunc()
+			}
+		}
+	}()
 }
 
 func getAppRefreshTokenFromStorage(teamID string) (string, error) {
