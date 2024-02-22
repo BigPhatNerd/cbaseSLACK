@@ -8,11 +8,10 @@ import (
 )
 
 func Handler(ctx context.Context) {
-	// Example: Fetch necessary data like tableName and teamID
-	tableName := "Tokens"   // This should ideally come from environment variables or secure storage
-	teamID := "T03FFC1TUPR" // Same as above
 
-	// Schedule app token rotation
+	tableName := "Tokens"
+	teamID := "T03FFC1TUPR"
+
 	oauth.ScheduleAppTokenRotation(tableName, teamID)
 
 }

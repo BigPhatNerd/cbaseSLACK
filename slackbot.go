@@ -390,12 +390,7 @@ func InteractionHandler(w http.ResponseWriter, r *http.Request) {
 
 	switch callback.Type {
 	case slack.InteractionTypeViewSubmission:
-		callbackJSON, err := json.MarshalIndent(callback, "", "  ")
-		if err != nil {
-			log.Printf("Error marshaling callback to JSON: %v", err)
-		} else {
-			log.Printf("callback: %s\n", callbackJSON)
-		}
+
 		userID := callback.User.ID
 		userName := callback.User.Name
 
@@ -403,7 +398,7 @@ func InteractionHandler(w http.ResponseWriter, r *http.Request) {
 		employeeSelected := values["employee_select"]["employee_select_action"].SelectedOption.Value
 		feedback := values["feedback"]["feedback_input"].Value
 		log.Printf("Employee selected: %s, Feedback: %s\n, UserID: %s\n, userName: %s\n", employeeSelected, feedback, userID, userName)
-		err = storeSurveyData(userID, userName, employeeSelected, feedback)
+		err := storeSurveyData(userID, userName, employeeSelected, feedback)
 		if err != nil {
 			log.Printf("Error storing survey data: %v", err)
 			http.Error(w, "Error storing data", http.StatusInternalServerError)
